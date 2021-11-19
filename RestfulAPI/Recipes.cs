@@ -2,7 +2,7 @@ using System;
 
 namespace RestfulAPI
 {
-    public class WeatherForecast
+    public class Recipes
     {
         public DateTime Date { get; set; }
 
