@@ -30,9 +30,9 @@ namespace RestfulAPI.Controllers
         {
             return _context.Recipes;
         }
-        public JArray Post([FromBody] RestfulAPI.Recipes model)
+        public JObject Post([FromBody] RestfulAPI.Recipes model)
         {
-            JArray jarrresp = new JArray();
+            JObject jarrresp = new JObject();
             RestfulAPI.Response resp = new Response();
             string json;
             if (string.IsNullOrEmpty(model?.title) || string.IsNullOrEmpty(model?.making_time) || string.IsNullOrEmpty(model?.serves) || string.IsNullOrEmpty(model?.ingredients) || (model?.cost == null))
@@ -41,30 +41,30 @@ namespace RestfulAPI.Controllers
                 resp.message = "Recipe creation failed!";
                 resp.required = "title, making_time, serves, ingredients, cost";
                  json = JsonConvert.SerializeObject(resp, Formatting.None);
-                jarrresp = JArray.Parse(json);
+                //jarrresp = JArray.Parse(json);
             }
             _context.Recipes.Add(model);
             _context.SaveChanges();
             resp.message = "Recipe successfully created!";
             resp.recipe = _context.Recipes.Where(x => x.title == model.title).FirstOrDefault();
              json = JsonConvert.SerializeObject(resp, Formatting.None);
-            jarrresp = JArray.Parse(json);
+            jarrresp = JObject.Parse(json);
             return jarrresp;
         }
-        public JArray Get(int id)
+        public JObject Get(int id)
         {
-            JArray jarrresp = new JArray();
+            JObject jarrresp = new JObject();
             RestfulAPI.Response resp = new Response();
             string json;
             resp.message = "Recipe details by id";
             resp.recipe = _context.Recipes.Where(x => x.id == id).FirstOrDefault();
             json = JsonConvert.SerializeObject(resp, Formatting.None);
-            jarrresp = JArray.Parse(json);
+            jarrresp = JObject.Parse(json);
             return jarrresp;
         }
-        public JArray Patch(int id, [FromBody] RestfulAPI.Recipes model)
+        public JObject Patch(int id, [FromBody] RestfulAPI.Recipes model)
         {
-            JArray jarrresp = new JArray();
+            JObject jarrresp = new JObject();
             RestfulAPI.Response resp = new Response();
             string json;
             var temp=_context.Recipes.Where(x => x.id == id).First();
@@ -77,12 +77,12 @@ namespace RestfulAPI.Controllers
             resp.message = "Recipe successfully updated!";
             resp.recipe = temp;
             json = JsonConvert.SerializeObject(resp, Formatting.None);
-            jarrresp = JArray.Parse(json);
+            jarrresp = JObject.Parse(json);
             return jarrresp;
         } 
-        public JArray Delete(int id)
+        public JObject Delete(int id)
         {
-            JArray jarrresp = new JArray();
+            JObject jarrresp = new JObject();
             RestfulAPI.Response resp = new Response();
             string json;
             var temp = _context.Recipes.Where(x => x.id == id).FirstOrDefault();
@@ -97,7 +97,7 @@ namespace RestfulAPI.Controllers
                 resp.message = "Recipe successfully removed!";
             }
             json = JsonConvert.SerializeObject(resp, Formatting.None);
-            jarrresp = JArray.Parse(json);
+            jarrresp = JObject.Parse(json);
             return jarrresp;
         }
     }
